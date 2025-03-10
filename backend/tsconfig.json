@@ -1,7 +1,16 @@
 {
     "extends": "@tsconfig/node20/tsconfig.json",
     "compilerOptions": {
+        "target": "ESNext",
+        "module": "CommonJS",
         "rootDir": "src",
-        "outDir": "dist"
-    }
+        "outDir": "dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }
