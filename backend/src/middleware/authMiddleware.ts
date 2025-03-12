@@ -1,18 +1,44 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import User from "../models/User";
 
-export const protect = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];
+interface TokenPayload {
+  id: string;
+}
 
-  if (!token) {
-    return res.status(401).json({ message: "Not authorized, no token" });
-  }
+export const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  let token;
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Not authorized, token failed" });
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as TokenPayload;
+
+      if (!decoded || !decoded.id) {
+        const error = new Error("Not authorized, invalid token");
+        res.status(401);
+        return next(error);
+      }
+
+      req.user = { id: decoded.id };
+      next();
+    } catch (error) {
+      res.status(401);
+      return next(new Error("Not authorized, token failed"));
+    }
+  } else {
+    res.status(401);
+    return next(new Error("Not authorized, no token provided"));
   }
 };
