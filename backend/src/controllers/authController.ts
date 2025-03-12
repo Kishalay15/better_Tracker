@@ -1,15 +1,11 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import User, { IUser } from "../models/User";
+import User from "../models/User";
 
 interface IUserInput {
   name: string;
   email: string;
   password: string;
-}
-
-interface JwtPayload {
-  id: string;
 }
 
 export const generateToken = (id: string): string => {

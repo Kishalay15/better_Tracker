@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
+import User from "../models/User"; // Import your User model
+import { Types } from "mongoose";
 
 interface TokenPayload {
   id: string;
@@ -11,13 +12,10 @@ export const protect = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  let token;
+  const authHeader = req.headers.authorization;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    const token = authHeader.split(" ")[1];
 
     try {
       const decoded = jwt.verify(
@@ -26,19 +24,23 @@ export const protect = async (
       ) as TokenPayload;
 
       if (!decoded || !decoded.id) {
-        const error = new Error("Not authorized, invalid token");
-        res.status(401);
-        return next(error);
+        res.status(401).json({ message: "Not authorized, invalid token" });
+        return;
       }
 
-      req.user = { id: decoded.id };
+      const user = await User.findById(decoded.id).select("_id"); // Only fetch _id for efficiency
+
+      if (!user) {
+        res.status(401).json({ message: "Not authorized, user not found" });
+        return;
+      }
+
+      req.user = { _id: user._id, id: decoded.id };
       next();
     } catch (error) {
-      res.status(401);
-      return next(new Error("Not authorized, token failed"));
+      res.status(401).json({ message: "Not authorized, token failed" });
     }
   } else {
-    res.status(401);
-    return next(new Error("Not authorized, no token provided"));
+    res.status(401).json({ message: "Not authorized, no token provided" });
   }
 };

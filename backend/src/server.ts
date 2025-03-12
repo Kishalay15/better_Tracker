@@ -5,6 +5,8 @@ import path from "path";
 import connectDb from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import { errorHandler } from "./middleware/errorHandler";
+import incomeRoutes from "./routes/incomeRoutes";
+import expenseRoutes from "./routes/expenseRoutes";
 
 dotenv.config();
 
@@ -26,7 +28,8 @@ connectDb();
 
 //route
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/income")
+app.use("/api/v1/income", incomeRoutes);
+app.use("/api/v1/expense", expenseRoutes);
 
 //if not found
 app.use((req, res) => {
