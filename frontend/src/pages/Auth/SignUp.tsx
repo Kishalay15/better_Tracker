@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { validateEmail } from "../../utils/helper";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import { useUserContext } from "../../context/UserContext";
+import axios from "axios";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -12,13 +16,15 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const { updateUser } = useUserContext();
+
   const navigate = useNavigate();
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword((prev) => !prev);
 
-  const handleSignUp = (event: React.FormEvent) => {
+  const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!name) {
@@ -42,7 +48,7 @@ const SignUp = () => {
     }
 
     if (password.length < 8) {
-      setError("Password must be at least 6 characters.");
+      setError("Password must be at least 8 characters.");
       return;
     }
 
@@ -52,7 +58,37 @@ const SignUp = () => {
     }
 
     setError(null);
-    navigate("/dashboard");
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name,
+        email,
+        password,
+      });
+
+      console.log("Registration Response:", response.data);
+
+      const { token, user } = response.data;
+
+      if (token && user) {
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      } else {
+        console.error("Token or user missing in response.");
+        setError("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error); // Debugging log
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data.message ||
+          "Registration failed. Please try again.";
+        setError(message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (

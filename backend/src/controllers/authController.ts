@@ -42,6 +42,7 @@ export const registerUser = async (
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      user,
       token: generateToken(user._id.toString()),
     });
   } catch (error) {

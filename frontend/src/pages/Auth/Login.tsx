@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { validateEmail } from "../../utils/helper";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import axios from "axios";
+import { useUserContext } from "../../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,13 +14,15 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  const { updateUser } = useUserContext();
+
   const navigate = useNavigate();
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     let isValid = true;
@@ -39,9 +45,37 @@ const Login = () => {
     setEmailError(null);
     setPasswordError(null);
 
-    navigate("/dashboard");
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
 
-    console.log("Logging in with:", { email, password });
+      console.log("Login Response:", response.data);
+
+      const { token, user } = response.data;
+
+      if (token && user) {
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data.message ||
+          "Invalid credentials. Please try again.";
+        if (message.toLowerCase().includes("email")) {
+          setEmailError(message);
+        } else if (message.toLowerCase().includes("password")) {
+          setPasswordError(message);
+        } else {
+          setEmailError(message);
+        }
+      } else {
+        setEmailError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (

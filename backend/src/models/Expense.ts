@@ -11,7 +11,7 @@ export interface IExpense extends Document {
 const ExpenseSchema: Schema<IExpense> = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
