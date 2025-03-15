@@ -1,18 +1,36 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS, getFullUrl } from "../../utils/apiPaths";
-import { ShoppingCart } from "lucide-react";
+import {
+  ShoppingCart,
+  Utensils,
+  Car,
+  Home,
+  Book,
+  Clapperboard,
+} from "lucide-react";
 
 interface ExpenseEntry {
   _id: string;
+  icon: string;
   category: string;
   amount: number;
   date: string;
-  icon?: string;
 }
 
-const Expense = () => {
+const categoryIcons: Record<string, React.ReactNode> = {
+  groceries: <Utensils className="text-red-500 w-8 h-8" />,
+  transportation: <Car className="text-red-500 w-8 h-8" />,
+  housing: <Home className="text-red-500 w-8 h-8" />,
+  entertainment: <Clapperboard className="text-red-500 w-8 h-8" />,
+  education: <Book className="text-red-500 w-8 h-8" />,
+};
+
+const categories = Object.keys(categoryIcons);
+
+const Expense: React.FC = () => {
+  const [icon, setIcon] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [expenses, setExpenses] = useState<ExpenseEntry[]>([]);
@@ -36,16 +54,18 @@ const Expense = () => {
   };
 
   const handleAddExpense = async () => {
-    if (!category || !amount) return;
+    if (!icon || !category || !amount) return;
     try {
       const response = await axiosInstance.post(
         getFullUrl(API_PATHS.EXPENSE.ADD),
         {
+          icon,
           category,
           amount,
         }
       );
       setExpenses([response.data.expense, ...expenses]);
+      setIcon("");
       setCategory("");
       setAmount("");
     } catch (error) {
@@ -72,14 +92,28 @@ const Expense = () => {
     <DashboardLayout>
       <div>
         <h2 className="text-2xl font-bold mb-4">Expenses</h2>
+
         <div className="bg-white shadow-md rounded-lg p-4 mb-6">
           <input
             type="text"
-            placeholder="Expense Category"
+            placeholder="Expense Name"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="border p-2 rounded-lg w-full mb-3"
           />
+          <select
+            value={icon}
+            onChange={(e) => setIcon(e.target.value)}
+            className="border p-2 rounded-lg w-full mb-3"
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </select>
+
           <input
             type="number"
             placeholder="Amount"
@@ -87,6 +121,7 @@ const Expense = () => {
             onChange={(e) => setAmount(Number(e.target.value))}
             className="border p-2 rounded-lg w-full mb-3"
           />
+
           <button
             onClick={handleAddExpense}
             className="bg-purple-800 text-white px-4 py-2 rounded-lg w-full"
@@ -110,20 +145,14 @@ const Expense = () => {
                   className="p-4 bg-gray-100 rounded-lg flex justify-between items-center"
                 >
                   <div className="flex items-center gap-3">
-                    {expense.icon ? (
-                      <img
-                        src={expense.icon}
-                        alt="icon"
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    ) : (
+                    {categoryIcons[expense.icon] || (
                       <ShoppingCart className="text-red-500 w-8 h-8" />
                     )}
                     <div>
+                      <p className="font-medium">{expense.category}</p>
                       <p className="text-sm text-gray-600">
                         {new Date(expense.date).toLocaleDateString()}
                       </p>
-                      <p className="font-medium">{expense.category}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">

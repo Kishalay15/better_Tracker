@@ -2,16 +2,36 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS, getFullUrl } from "../../utils/apiPaths";
-import { Wallet } from "lucide-react";
+import {
+  Wallet,
+  Briefcase,
+  Building,
+  PiggyBank,
+  Gift,
+  TrendingUp,
+} from "lucide-react";
 
 interface IncomeEntry {
   _id: string;
   source: string;
   amount: number;
   date: string;
+  icon: string;
 }
 
+const sourceIcons: Record<string, React.ReactNode> = {
+  salary: <Briefcase className="text-green-500 w-8 h-8" />,
+  freelance: <Wallet className="text-green-500 w-8 h-8" />,
+  investment: <TrendingUp className="text-green-500 w-8 h-8" />,
+  rental: <Building className="text-green-500 w-8 h-8" />,
+  pocketmoney: <PiggyBank className="text-green-500 w-8 h-8" />,
+  gift: <Gift className="text-green-500 w-8 h-8" />,
+};
+
+const sources = Object.keys(sourceIcons);
+
 const Income = () => {
+  const [icon, setIcon] = useState("");
   const [source, setSource] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [incomes, setIncomes] = useState<IncomeEntry[]>([]);
@@ -35,16 +55,18 @@ const Income = () => {
   };
 
   const handleAddIncome = async () => {
-    if (!source || !amount) return;
+    if (!icon || !source || !amount) return;
     try {
       const response = await axiosInstance.post(
         getFullUrl(API_PATHS.INCOME.ADD),
         {
+          icon,
           source,
           amount,
         }
       );
       setIncomes([response.data.income, ...incomes]);
+      setIcon("");
       setSource("");
       setAmount("");
     } catch (error) {
@@ -79,6 +101,19 @@ const Income = () => {
             onChange={(e) => setSource(e.target.value)}
             className="border p-2 rounded-lg w-full mb-3"
           />
+          <select
+            value={icon}
+            onChange={(e) => setIcon(e.target.value)}
+            className="border p-2 rounded-lg w-full mb-3"
+          >
+            <option value="">Select Source</option>
+            {sources.map((src) => (
+              <option key={src} value={src}>
+                {src.charAt(0).toUpperCase() + src.slice(1)}
+              </option>
+            ))}
+          </select>
+
           <input
             type="number"
             placeholder="Amount"
@@ -86,6 +121,7 @@ const Income = () => {
             onChange={(e) => setAmount(Number(e.target.value))}
             className="border p-2 rounded-lg w-full mb-3"
           />
+
           <button
             onClick={handleAddIncome}
             className="bg-purple-800 text-white px-4 py-2 rounded-lg w-full"
@@ -109,12 +145,14 @@ const Income = () => {
                   className="p-4 bg-gray-100 rounded-lg flex justify-between items-center"
                 >
                   <div className="flex items-center gap-3">
-                    <Wallet className="text-green-500 w-8 h-8" />
+                    {sourceIcons[income.icon] || (
+                      <Wallet className="text-green-500 w-8 h-8" />
+                    )}
                     <div>
+                      <p className="font-medium">{income.source}</p>
                       <p className="text-sm text-gray-600">
                         {new Date(income.date).toLocaleDateString()}
                       </p>
-                      <p className="font-medium">{income.source}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
