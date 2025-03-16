@@ -3,12 +3,20 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS, getFullUrl } from "../../utils/apiPaths";
 import {
-  ShoppingCart,
   Utensils,
   Car,
   Home,
   Book,
   Clapperboard,
+  ChartNoAxesCombined,
+  Gift,
+  Siren,
+  PartyPopper,
+  Carrot,
+  BriefcaseMedical,
+  ShoppingCart,
+  BookUp,
+  PiggyBank,
 } from "lucide-react";
 
 interface ExpenseEntry {
@@ -20,11 +28,19 @@ interface ExpenseEntry {
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
-  groceries: <Utensils className="text-red-500 w-8 h-8" />,
+  groceries: <Carrot className="text-red-500 w-8 h-8" />,
   transportation: <Car className="text-red-500 w-8 h-8" />,
   housing: <Home className="text-red-500 w-8 h-8" />,
   entertainment: <Clapperboard className="text-red-500 w-8 h-8" />,
   education: <Book className="text-red-500 w-8 h-8" />,
+  investment: <ChartNoAxesCombined className="text-red-500 w-8 h-8" />,
+  gift: <Gift className="text-red-500 w-8 h-8" />,
+  emergency: <Siren className="text-red-500 w-8 h-8" />,
+  social: <PartyPopper className="text-red-500 w-8 h-8" />,
+  medicine: <BriefcaseMedical className="text-red-500 w-8 h-8" />,
+  food: <Utensils className="text-red-500 w-8 h-8" />,
+  shopping: <ShoppingCart className="text-red-500 w-8 h-8" />,
+  savings: <PiggyBank className="text-red-500 w-8 h-8" />,
 };
 
 const categories = Object.keys(categoryIcons);
@@ -54,7 +70,7 @@ const Expense: React.FC = () => {
   };
 
   const handleAddExpense = async () => {
-    if (!icon || !category || !amount) return;
+    if (!category || !amount) return;
     try {
       const response = await axiosInstance.post(
         getFullUrl(API_PATHS.EXPENSE.ADD),
@@ -146,7 +162,7 @@ const Expense: React.FC = () => {
                 >
                   <div className="flex items-center gap-3">
                     {categoryIcons[expense.icon] || (
-                      <ShoppingCart className="text-red-500 w-8 h-8" />
+                      <BookUp className="text-red-500 w-8 h-8" />
                     )}
                     <div>
                       <p className="font-medium">{expense.category}</p>

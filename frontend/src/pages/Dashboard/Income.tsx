@@ -9,6 +9,8 @@ import {
   PiggyBank,
   Gift,
   TrendingUp,
+  HousePlus,
+  BookDown,
 } from "lucide-react";
 
 interface IncomeEntry {
@@ -26,6 +28,7 @@ const sourceIcons: Record<string, React.ReactNode> = {
   rental: <Building className="text-green-500 w-8 h-8" />,
   pocketmoney: <PiggyBank className="text-green-500 w-8 h-8" />,
   gift: <Gift className="text-green-500 w-8 h-8" />,
+  rent: <HousePlus className="text-green-500 w-8 h-8" />,
 };
 
 const sources = Object.keys(sourceIcons);
@@ -55,7 +58,7 @@ const Income = () => {
   };
 
   const handleAddIncome = async () => {
-    if (!icon || !source || !amount) return;
+    if (!source || !amount) return;
     try {
       const response = await axiosInstance.post(
         getFullUrl(API_PATHS.INCOME.ADD),
@@ -146,7 +149,7 @@ const Income = () => {
                 >
                   <div className="flex items-center gap-3">
                     {sourceIcons[income.icon] || (
-                      <Wallet className="text-green-500 w-8 h-8" />
+                      <BookDown className="text-green-500 w-8 h-8" />
                     )}
                     <div>
                       <p className="font-medium">{income.source}</p>

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
@@ -53,7 +52,6 @@ type DashboardData = {
 };
 
 const Home = () => {
-  const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
