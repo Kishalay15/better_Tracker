@@ -6,7 +6,6 @@ import {
   Wallet,
   Briefcase,
   Building,
-  PiggyBank,
   Gift,
   TrendingUp,
   HousePlus,
@@ -26,7 +25,7 @@ const sourceIcons: Record<string, React.ReactNode> = {
   freelance: <Wallet className="text-green-500 w-8 h-8" />,
   investment: <TrendingUp className="text-green-500 w-8 h-8" />,
   rental: <Building className="text-green-500 w-8 h-8" />,
-  pocketmoney: <PiggyBank className="text-green-500 w-8 h-8" />,
+  pocketmoney: <Wallet className="text-green-500 w-8 h-8" />,
   gift: <Gift className="text-green-500 w-8 h-8" />,
   rent: <HousePlus className="text-green-500 w-8 h-8" />,
 };
