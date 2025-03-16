@@ -34,6 +34,9 @@ const expenseIcons = {
   education: <Book className="text-red-500 w-8 h-8" />,
 };
 
+type IncomeSource = keyof typeof incomeIcons;
+type ExpenseCategory = keyof typeof expenseIcons;
+
 type Transaction = {
   _id: string;
   amount: number;
@@ -132,12 +135,15 @@ const Home = () => {
                     >
                       <div className="flex items-center gap-3">
                         {transaction.type === "income"
-                          ? incomeIcons[transaction.icon || ""] || (
+                          ? incomeIcons[transaction.icon as IncomeSource] || (
                               <Wallet className="text-green-500 w-8 h-8" />
                             )
-                          : expenseIcons[transaction.icon || ""] || (
+                          : expenseIcons[
+                              transaction.icon as ExpenseCategory
+                            ] || (
                               <ShoppingCart className="text-red-500 w-8 h-8" />
                             )}
+
                         <div>
                           <p className="text-sm text-gray-600">
                             {new Date(transaction.date).toLocaleDateString()}
