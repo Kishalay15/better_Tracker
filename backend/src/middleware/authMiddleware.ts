@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User"; // Import your User model
+import User from "../models/User.js"; // Import your User model
 import { Types } from "mongoose";
 
 interface TokenPayload {

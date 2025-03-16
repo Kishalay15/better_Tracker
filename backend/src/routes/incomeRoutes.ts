@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { protect } from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware.js";
 import {
   addIncome,
   getAllIncomes,
   deleteIncome,
-} from "../controllers/incomeController";
+} from "../controllers/incomeController.js";
 
 const router = Router();
 

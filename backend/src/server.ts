@@ -2,14 +2,18 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import path from "path";
-import connectDb from "./config/db";
-import authRoutes from "./routes/authRoutes";
-import { errorHandler } from "./middleware/errorHandler";
-import incomeRoutes from "./routes/incomeRoutes";
-import expenseRoutes from "./routes/expenseRoutes";
-import dashboardRoutes from "./routes/dashboardRoutes";
+import connectDb from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import incomeRoutes from "./routes/incomeRoutes.js";
+import expenseRoutes from "./routes/expenseRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -21,8 +25,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-const __dirname = path.resolve();
 
 app.use(express.json());
 

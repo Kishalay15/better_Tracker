@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Expense from "../models/Expense";
-import Income from "../models/Income";
+import Expense from "../models/Expense.js";
+import Income from "../models/Income.js";
 import { isValidObjectId, Types } from "mongoose";
 
 export const getDashboardData = async (
