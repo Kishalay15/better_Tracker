@@ -79,7 +79,7 @@ const SignUp = () => {
         setError("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error during signup:", error); // Debugging log
+      console.error("Error during signup:", error);
       if (axios.isAxiosError(error)) {
         const message =
           error.response?.data.message ||
