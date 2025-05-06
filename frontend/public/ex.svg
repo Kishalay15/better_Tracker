@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#9b59b6" />
+  <circle cx="100" cy="100" r="80" fill="#8e44ad" />
+
+  <!-- Dollar Sign -->
+  <path d="M100 45 C85 45, 75 55, 75 70 C75 85, 85 90, 100 95 C115 100, 125 105, 125 120 C125 135, 115 145, 100 145 C85 145, 75 135, 75 120"
+        stroke="#e0b0ff" stroke-width="10" fill="none" stroke-linecap="round" />
+  <line x1="100" y1="40" x2="100" y2="150" stroke="#e0b0ff" stroke-width="10" stroke-linecap="round" />
+
+  <!-- Graph Line -->
+  <polyline points="40,130 60,110 80,120 100,90 120,95 140,75 160,65"
+            stroke="#d8bfd8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Small Circles on Graph Points -->
+  <circle cx="40" cy="130" r="4" fill="#f8f0ff" />
+  <circle cx="60" cy="110" r="4" fill="#f8f0ff" />
+  <circle cx="80" cy="120" r="4" fill="#f8f0ff" />
+  <circle cx="100" cy="90" r="4" fill="#f8f0ff" />
+  <circle cx="120" cy="95" r="4" fill="#f8f0ff" />
+  <circle cx="140" cy="75" r="4" fill="#f8f0ff" />
+  <circle cx="160" cy="65" r="4" fill="#f8f0ff" />
+</svg>
