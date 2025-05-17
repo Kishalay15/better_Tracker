@@ -35,6 +35,19 @@ const App = () => {
             />
           </Routes>
         </Router>
+        <footer className="text-center text-gray-400 text-xs py-6">
+          <span>
+            Built with <span className="text-violet-700">💜</span> by{" "}
+            <a
+              href="https://personal-portfolio-wheat-kappa.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-violet-600 transition-colors"
+            >
+              Kishalay
+            </a>
+          </span>
+        </footer>
       </div>
     </UserProvider>
   );

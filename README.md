@@ -77,3 +77,7 @@ To run Better Tracker locally:
 - **Database:** MongoDB
 
 Please visit the live site: [Better Expense Tracker App](https://better-tracker.vercel.app/).
+
+---
+
+Created with 💜 for by [Kishalay](https://personal-portfolio-wheat-kappa.vercel.app/)
